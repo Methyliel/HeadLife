@@ -25,10 +25,8 @@ public class Exit implements iLandscape {
     }
     @Override
     public boolean canMove(iMoveable object) {
-        if (object instanceof iGameObject) {
-            if ("Head".equals(((iGameObject) object).getName())) {
+        if (object instanceof Head) {
                 return true;
-            }
         }
         return false;
     }
