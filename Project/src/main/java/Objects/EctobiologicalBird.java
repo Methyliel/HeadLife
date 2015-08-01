@@ -10,18 +10,17 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-public class Head implements iDrawable, iMoveable, iGameObject, iAttack {
+public class EctobiologicalBird implements iDrawable, iMoveable, iGameObject, iAttack {
     private final String NAME;
     private Image portrait;
     private Point pixelLocation;
     private Point location;
     private String passRights;
-    private String bloodColor;
     private int hp;
     private int damage;
     private int range;
 
-    public Head(String name) {
+    public EctobiologicalBird(String name) {
         this.NAME = name;
         Image img = null;
         try {
@@ -31,28 +30,37 @@ public class Head implements iDrawable, iMoveable, iGameObject, iAttack {
             e.printStackTrace();
         }
         this.setImage(img);
-        if ("Feferi".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(0);
+        this.setPassRights("flying");
+    }
+    @Override
+    public void setHealthPoint(int healthPoint) {
+        if (healthPoint >= 0) {
+            this.hp = healthPoint;
         }
-        if ("Eridan".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(1);
+    }
+    @Override
+    public int getHealthPoint() {
+        return this.hp;
+    }
+    @Override
+    public void setDamage(int damage) {
+        if (damage > 0) {
+            this.damage = damage;
         }
-        if ("Equius".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(2);
+    }
+    @Override
+    public int getDamage() {
+        return this.damage;
+    }
+    @Override
+    public void setRange(int range) {
+        if (range >= 0) {
+            this.range = range;
         }
-        if ("Vriska".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(3);
-        }
-        if ("Nepeta".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(4);
-        }
-        if ("Sollux".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(5);
-        }
-        if ("Tavros".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(6);
-        }
-        this.setPassRights("walk");
+    }
+    @Override
+    public int getRange() {
+        return this.range;
     }
     @Override
     public void setPixelLocation(Point location) {
@@ -97,38 +105,5 @@ public class Head implements iDrawable, iMoveable, iGameObject, iAttack {
     @Override
     public String getPassRights() {
         return this.passRights;
-    }
-    public String getBloodColor() {
-        return this.bloodColor;
-    }
-    @Override
-    public void setHealthPoint(int healthPoint) {
-        if (healthPoint >= 0) {
-            this.hp = healthPoint;
-        }
-    }
-    @Override
-    public int getHealthPoint() {
-        return this.hp;
-    }
-    @Override
-    public void setDamage(int damage) {
-        if (damage > 0) {
-            this.damage = damage;
-        }
-    }
-    @Override
-    public int getDamage() {
-        return this.damage;
-    }
-    @Override
-    public void setRange(int range) {
-        if (range >= 0) {
-            this.range = range;
-        }
-    }
-    @Override
-    public int getRange() {
-        return this.range;
     }
 }
