@@ -4,7 +4,6 @@ import Interfaces.iDrawable;
 import Interfaces.iGameObject;
 import Interfaces.iItem;
 import Interfaces.iMoveable;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
@@ -22,15 +21,7 @@ public class Horn implements iDrawable, iMoveable, iGameObject, iItem {
 
     public Horn(String name) {
         this.NAME = name;
-        Image img = null;
-        try {
-            String imagePath = "/src/main/resources/image/" + this.NAME + ".png";
-            img = ImageIO.read(new File(System.getProperty("user.dir") + imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.setImage(img);
-        this.setPassRights("pushed");
+
         this.messages = new ArrayList<Image>();
         int messageNumber = 4;
         for (int i = 0; i < messageNumber; i++) {
