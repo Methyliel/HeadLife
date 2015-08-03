@@ -4,11 +4,7 @@ import Interfaces.iAttack;
 import Interfaces.iDrawable;
 import Interfaces.iGameObject;
 import Interfaces.iMoveable;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Head implements iDrawable, iMoveable, iGameObject, iAttack {
     private final String NAME;
@@ -23,36 +19,6 @@ public class Head implements iDrawable, iMoveable, iGameObject, iAttack {
 
     public Head(String name) {
         this.NAME = name;
-        Image img = null;
-        try {
-            String imagePath = "/src/main/resources/image/" + this.NAME + ".png";
-            img = ImageIO.read(new File(System.getProperty("user.dir") + imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.setImage(img);
-        if ("Feferi".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(0);
-        }
-        if ("Eridan".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(1);
-        }
-        if ("Equius".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(2);
-        }
-        if ("Vriska".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(3);
-        }
-        if ("Nepeta".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(4);
-        }
-        if ("Sollux".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(5);
-        }
-        if ("Tavros".equals(this.NAME)) {
-            bloodColor = BloodColors.instance().getExactColor(6);
-        }
-        this.setPassRights("walk");
     }
     @Override
     public void setPixelLocation(Point location) {
@@ -130,5 +96,8 @@ public class Head implements iDrawable, iMoveable, iGameObject, iAttack {
     @Override
     public int getRange() {
         return this.range;
+    }
+    public void setBloodColor(String bloodColor) {
+        this.bloodColor = bloodColor;
     }
 }

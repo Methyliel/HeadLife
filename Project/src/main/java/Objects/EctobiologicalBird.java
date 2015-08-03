@@ -4,11 +4,7 @@ import Interfaces.iAttack;
 import Interfaces.iDrawable;
 import Interfaces.iGameObject;
 import Interfaces.iMoveable;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class EctobiologicalBird implements iDrawable, iMoveable, iGameObject, iAttack {
     private final String NAME;
@@ -22,15 +18,6 @@ public class EctobiologicalBird implements iDrawable, iMoveable, iGameObject, iA
 
     public EctobiologicalBird(String name) {
         this.NAME = name;
-        Image img = null;
-        try {
-            String imagePath = "/src/main/resources/image/" + this.NAME + ".png";
-            img = ImageIO.read(new File(System.getProperty("user.dir") + imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.setImage(img);
-        this.setPassRights("flying");
     }
     @Override
     public void setHealthPoint(int healthPoint) {

@@ -4,11 +4,7 @@ import Interfaces.iDrawable;
 import Interfaces.iGameObject;
 import Interfaces.iItem;
 import Interfaces.iMoveable;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Potion implements iDrawable, iMoveable, iGameObject, iItem {
     private final String NAME;
@@ -21,15 +17,6 @@ public class Potion implements iDrawable, iMoveable, iGameObject, iItem {
     public Potion(String name) {
         this.NAME = name;
         bloodColor = BloodColors.instance().getSomeColor();
-        Image img = null;
-        try {
-            String imagePath = "/src/main/resources/image/" + this.NAME + this.bloodColor + ".png";
-            img = ImageIO.read(new File(System.getProperty("user.dir") + imagePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.setImage(img);
-        this.setPassRights("pushed");
     }
     @Override
     public void setPixelLocation(Point location) {
