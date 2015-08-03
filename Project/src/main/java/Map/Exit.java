@@ -3,6 +3,7 @@ package Map;
 import Interfaces.iGameObject;
 import Interfaces.iLandscape;
 import Interfaces.iMoveable;
+import Objects.Head;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,7 +28,7 @@ public class Exit implements iLandscape {
     @Override
     public boolean canMove(iMoveable object) {
         if (object instanceof Head) {
-                return true;
+            return true;
         }
         return false;
     }

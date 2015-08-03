@@ -3,6 +3,7 @@ package Map;
 import Interfaces.iGameObject;
 import Interfaces.iLandscape;
 import Interfaces.iMoveable;
+import Objects.Head;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
