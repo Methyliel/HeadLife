@@ -12,6 +12,7 @@ import java.io.IOException;
 public class Exit implements iLandscape {
     private Image image;
     private final String TYPE;
+    private String gate;
 
     public Exit() {
         this.TYPE = "Ground";
@@ -43,5 +44,13 @@ public class Exit implements iLandscape {
     @Override
     public Image getImage() {
         return this.image;
+    }
+    public void setGate(String newLevelName) {
+        if (null != newLevelName && (!"".equals(newLevelName))) {
+            this.gate = newLevelName;
+        }
+    }
+    public String getGate() {
+        return this.gate;
     }
 }
