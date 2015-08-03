@@ -1,0 +1,5 @@
+{
+   "startRoom": "/src/main/resources/files/Levels/startRoom.json";
+   "firstRoom": "/src/main/resources/files/Levels/firsttRoom.json";
+   "lastRoom": "/src/main/resources/files/Levels/lastRoom.json"
+}

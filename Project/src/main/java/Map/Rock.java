@@ -35,7 +35,7 @@ public class Rock implements iLandscape{
     }
     @Override
     public boolean canMove(iMoveable object) {
-        String passRights = object.getPassrights();
+        String passRights = object.getPassRights();
         if (passRights.contains("flying")) {
             return true;
         }
