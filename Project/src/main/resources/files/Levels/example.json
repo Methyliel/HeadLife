@@ -1,14 +1,10 @@
 {
-   "width": "10";
-   "length": "10";
-   "roomMap": ["G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G",
-			   "G", "G", "G", "G", "G", "G", "G", "G", "G", "G"]
+   "width" : "4";
+   "length" : "3";
+   "roomMap" : ["Ground", "Ground", "Ground", "Ground",
+				"Ground", "Ground", "Ground", "Ground",
+				"Ground", "Ground", "Ground", "Ground"];
+	"start" : ["2", "1"];			
+	"objects" : ["Potion", "3", "1",
+				 "AradiaBotRemains", "4", "3"]
 }

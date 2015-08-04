@@ -5,11 +5,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.List;
+import Interfaces.iGameObject;
 import Interfaces.iLandscape;
+import Logic.AbstractFactory;
 import Map.Level;
+import Objects.Factory;
 import com.google.gson.stream.JsonReader;
 
 public class Loader {
@@ -43,6 +47,8 @@ public class Loader {
             try {
                 //Намагаємось відкрити заданий файл
                 JsonReader jsonReader = new JsonReader(new FileReader(new File(levelFilePath)));
+                Map<Point, iLandscape> map = null;
+                List<iGameObject> objects = new ArrayList<iGameObject>();
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
                     String name = jsonReader.nextName();
@@ -83,7 +89,7 @@ public class Loader {
                                 }
                             }
                             //Приводимо карту в підходящий вигляд
-                            Map<Point, iLandscape> map = this.convertMap(levelMap);
+                            map = this.convertMap(levelMap);
                             //Якщо карта була зібрана неправильно, повертаємо помилку
                             if (null == map) {
                                 return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
@@ -100,12 +106,73 @@ public class Loader {
                         jsonReader.endArray();
                         attributeNameFound = true;
                     }
+                    if ("objects".equals(name)) {
+                        jsonReader.beginArray();
+                        //Файл читається до кінця
+                        int counter = 0;
+                        AbstractFactory factory = new Factory();
+                        String objectName = "";
+                        int x = 0, y = 0;
+                        while (jsonReader.hasNext()) {
+                            //Кожен перший елемент - ім'я об'єкту
+                            if (0 == counter) {
+                                objectName = jsonReader.nextString();
+                            }
+                            //Другий - координата по ОХ
+                            if (1 == counter) {
+                                x = jsonReader.nextInt();
+                            }
+                            //Третій - координата по ОУ
+                            if (2 == counter) {
+                                y = jsonReader.nextInt();
+                            }
+                            //Перевіряємо чи є достатньо данних щоб створити об'єкт
+                            if ((!"".equals(objectName)) && (0 != x) && (0 != y)) {
+                                //Перевіряємо чи не виходять координати за діапазон
+                                if (x < roomWidth && y < roomLength && x >= 0 && y >= 0) {
+                                    //Створюємо об'єкт і перевіряємо його
+                                    iGameObject obj = factory.createGameObject(objectName, new Point(x, y));
+                                    if (null == obj) {
+                                        return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
+                                    }
+                                    else {
+                                        objects.add(obj);
+                                    }
+                                }
+                                //Інакше, повертаємо помилку
+                                else {
+                                    return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
+                                }
+                            }
+                            //Інакше, повертаємо помилку
+                            else {
+                                return new Exception("Wrong structure at file " + levelFilePath);
+                            }
+                            if (2 == counter) {
+                                counter = 0;
+                                x = 0;
+                                y = 0;
+                                objectName = "";
+                            }
+                            else {
+                                counter++;
+                            }
+                        }
+                        jsonReader.endArray();
+                        attributeNameFound = true;
+                    }
                     //Якщо не передбачена обробка поточного поля, повертаємо помилку
                     if (!attributeNameFound) {
                         return new Exception("Wrong structure at file " + levelFilePath);
                     }
                 }
                 jsonReader.endObject();
+                if (null != map && null != objects) {
+                    this.currentLevel = new Level(map, objects);
+                }
+                else {
+                    return new Exception("Wrong structure at file " + levelFilePath);
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 //Якщо ми не можемо відкрити заданий файл, повертаємо помилку
