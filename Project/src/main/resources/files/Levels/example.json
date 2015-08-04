@@ -4,7 +4,6 @@
    "roomMap" : ["Ground", "Ground", "Ground", "Ground",
 				"Ground", "Ground", "Ground", "Ground",
 				"Ground", "Ground", "Ground", "Ground"];
-	"start" : ["2", "1"];			
 	"objects" : ["Potion", "3", "1",
 				 "AradiaBotRemains", "4", "3"]
 }
