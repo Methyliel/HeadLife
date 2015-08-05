@@ -89,14 +89,13 @@ public class Loader {
                                 }
                             }
                             //Приводимо карту в підходящий вигляд
-                            map = this.convertMap(levelMap);
+                            map = this.convertMap(levelMap,  roomWidth, roomLength);
                             //Якщо карта була зібрана неправильно, повертаємо помилку
                             if (null == map) {
                                 return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
                             }
-                            //Записуємо отриману карту в поле об'екта класу Level
 
-                            //Написати обробку об'єктів розташованих на карті
+                            //Написати обробку об'єктів розташованих на карті(шо я мала наувазі? треба подумати)
                             
                         }
                         //Якщо кількість клітинок не додатнє число, то повертаємо помилку
@@ -187,9 +186,21 @@ public class Loader {
             return new Exception("Wrong level name " + levelName);
         }
     }
-    //Після написання фабрики, дописати метод
-    private Map<Point, iLandscape> convertMap(Map<Point, String> levelMap) {
-        return null;
+    private Map<Point, iLandscape> convertMap(Map<Point, String> levelMap, int width, int lenght) {
+        Map<Point, iLandscape> newLevelMap = new HashMap<Point, iLandscape>();
+        AbstractFactory factory = new Factory();
+        for (Map.Entry<Point, String> entry : levelMap.entrySet()) {
+            Point key = entry.getKey();
+            String value = entry.getValue();
+            iLandscape object = factory.createLandscape(value);
+            if (null == object) {
+                return null;
+            }
+            else {
+                newLevelMap.put(key, object);
+            }
+        }
+        return newLevelMap;
     }
     public Level getLevel() {
         return this.currentLevel;
