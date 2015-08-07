@@ -47,8 +47,8 @@ public class Loader {
             try {
                 //Намагаємось відкрити заданий файл
                 JsonReader jsonReader = new JsonReader(new FileReader(new File(levelFilePath)));
-                Map<Point, iLandscape> map = null;
-                List<iGameObject> objects = new ArrayList<iGameObject>();
+                Map<Point, iLandscape> levelMap = null;
+                List<iGameObject> gameObjectsAtLevel = null;
                 jsonReader.beginObject();
                 while (jsonReader.hasNext()) {
                     String name = jsonReader.nextName();
@@ -73,91 +73,17 @@ public class Loader {
                         attributeNameFound = true;
                     }
                     if ("roomMap".equals(name)) {
-                        Map<Point, String> levelMap = new HashMap<Point, String>();
-                        jsonReader.beginArray();
-                        //Визначаємо кількість клітинок на карті
-                        int arrayBorder = roomLength * roomWidth;
-                        //Задаємо номер рядка(координату по осі ОУ) і стовбчика(координату по осі ОХ) для клитинки
-                        int cellColumn = 0, cellRow = 1;
-                        if (arrayBorder > 0) {
-                            //Ширина кімнати - це кількість клітинок по осі ОХ
-                            for (int x = 0; x < roomWidth; x++) {
-                                //Довжина кімнати - це кількість клітинок по осі ОУ
-                                for (int y = 0; y < roomLength; y++) {
-                                    Point cellLocation = new Point(x, y);
-                                    levelMap.put(cellLocation, jsonReader.nextString());
-                                }
-                            }
-                            //Приводимо карту в підходящий вигляд
-                            map = this.convertMap(levelMap,  roomWidth, roomLength);
-                            //Якщо карта була зібрана неправильно, повертаємо помилку
-                            if (null == map) {
-                                return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
-                            }
-
-                            //Написати обробку об'єктів розташованих на карті(шо я мала наувазі? треба подумати)
-                            
+                        levelMap = this.readMap(jsonReader, roomWidth, roomLength);
+                        if (null == levelMap) {
+                            return new Exception("Error in file " + levelFilePath + " at attribute " + name);
                         }
-                        //Якщо кількість клітинок не додатнє число, то повертаємо помилку
-                        else {
-                            return new Exception("Wrong structure at file " + levelFilePath);
-                        }
-                        jsonReader.endArray();
                         attributeNameFound = true;
                     }
                     if ("objects".equals(name)) {
-                        jsonReader.beginArray();
-                        //Файл читається до кінця
-                        int counter = 0;
-                        AbstractFactory factory = new Factory();
-                        String objectName = "";
-                        int x = 0, y = 0;
-                        while (jsonReader.hasNext()) {
-                            //Кожен перший елемент - ім'я об'єкту
-                            if (0 == counter) {
-                                objectName = jsonReader.nextString();
-                            }
-                            //Другий - координата по ОХ
-                            if (1 == counter) {
-                                x = jsonReader.nextInt();
-                            }
-                            //Третій - координата по ОУ
-                            if (2 == counter) {
-                                y = jsonReader.nextInt();
-                            }
-                            //Перевіряємо чи є достатньо данних щоб створити об'єкт
-                            if ((!"".equals(objectName)) && (0 != x) && (0 != y)) {
-                                //Перевіряємо чи не виходять координати за діапазон
-                                if (x < roomWidth && y < roomLength && x >= 0 && y >= 0) {
-                                    //Створюємо об'єкт і перевіряємо його
-                                    iGameObject obj = factory.createGameObject(objectName, new Point(x, y));
-                                    if (null == obj) {
-                                        return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
-                                    }
-                                    else {
-                                        objects.add(obj);
-                                    }
-                                }
-                                //Інакше, повертаємо помилку
-                                else {
-                                    return new Exception("Wrong data in file " + levelFilePath + " at attribute " + name);
-                                }
-                            }
-                            //Інакше, повертаємо помилку
-                            else {
-                                return new Exception("Wrong structure at file " + levelFilePath);
-                            }
-                            if (2 == counter) {
-                                counter = 0;
-                                x = 0;
-                                y = 0;
-                                objectName = "";
-                            }
-                            else {
-                                counter++;
-                            }
+                        gameObjectsAtLevel = this.readObjects(jsonReader, roomWidth, roomLength);
+                        if (null == gameObjectsAtLevel) {
+                            return new Exception("Error in file " + levelFilePath + " at attribute " + name);
                         }
-                        jsonReader.endArray();
                         attributeNameFound = true;
                     }
                     //Якщо не передбачена обробка поточного поля, повертаємо помилку
@@ -166,12 +92,14 @@ public class Loader {
                     }
                 }
                 jsonReader.endObject();
-                if (null != map && null != objects) {
-                    this.currentLevel = new Level(map, objects);
+
+                if (null != levelMap && null != gameObjectsAtLevel) {
+                    this.currentLevel = new Level(levelMap, gameObjectsAtLevel);
                 }
                 else {
-                    return new Exception("Wrong structure at file " + levelFilePath);
+                    return new Exception("Some error. Don't know what exactly. Probably, never showed up.");
                 }
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 //Якщо ми не можемо відкрити заданий файл, повертаємо помилку
@@ -186,7 +114,71 @@ public class Loader {
             return new Exception("Wrong level name " + levelName);
         }
     }
-    private Map<Point, iLandscape> convertMap(Map<Point, String> levelMap, int width, int lenght) {
+    private Map<Point, iLandscape> readMap(JsonReader jsonReader, int WIDTH, int LENGHT) throws IOException {
+        Map<Point, String> levelMap = new HashMap<Point, String>();
+        Map<Point, iLandscape> map = null;
+        jsonReader.beginArray();
+        //Визначаємо кількість клітинок на карті
+        int arrayBorder = LENGHT * WIDTH;
+        if (arrayBorder > 0) {
+            //Ширина кімнати - це кількість клітинок по осі ОХ
+            for (int x = 0; x < WIDTH; x++) {
+                //Довжина кімнати - це кількість клітинок по осі ОУ
+                for (int y = 0; y < LENGHT; y++) {
+                    Point cellLocation = new Point(x, y);
+                    levelMap.put(cellLocation, jsonReader.nextString());
+                }
+            }
+            //Приводимо карту в підходящий вигляд
+            map = this.convertMap(levelMap);
+        }
+        jsonReader.endArray();
+        return map;
+    }
+    private List<iGameObject> readObjects(JsonReader jsonReader, int WIDTH, int LENGHT) throws IOException {
+        List<iGameObject> gameObjectsAtLevel = new ArrayList<iGameObject>();
+        jsonReader.beginArray();
+        int counter = 0;
+        String objectName = "";
+        int x = 0, y = 0;
+        AbstractFactory factory = new Factory();
+        while (jsonReader.hasNext()) {
+            if (0 == counter) {
+                objectName = jsonReader.nextString();
+            }
+            if (1 == counter) {
+                x = jsonReader.nextInt();
+                if (x >= WIDTH) {
+                    return null;
+                }
+            }
+            if (2 == counter) {
+                y = jsonReader.nextInt();
+                if (y >= LENGHT) {
+                    return null;
+                }
+                iGameObject object = factory.createGameObject(objectName, new Point(x, y));
+                if (null != object) {
+                    gameObjectsAtLevel.add(object);
+                }
+                else {
+                    return null;
+                }
+            }
+            if (2 == counter) {
+                counter = 0;
+                x = 0;
+                y = 0;
+                objectName = "";
+            }
+            else {
+                counter++;
+            }
+        }
+        jsonReader.endArray();
+        return gameObjectsAtLevel;
+    }
+    public Map<Point, iLandscape> convertMap(Map<Point, String> levelMap) {
         Map<Point, iLandscape> newLevelMap = new HashMap<Point, iLandscape>();
         AbstractFactory factory = new Factory();
         for (Map.Entry<Point, String> entry : levelMap.entrySet()) {
