@@ -18,31 +18,25 @@ public class Potion implements iDrawable, iMoveable, iGameObject, iItem {
         this.NAME = name;
         bloodColor = BloodColors.instance().getSomeColor();
     }
-    @Override
     public void setPixelLocation(Point location) {
         if (null != location) {
             this.pixelLocation = location;
         }
     }
-    @Override
     public Point getPixelLocation() {
         return this.pixelLocation;
     }
-    @Override
     public void setImage(Image image) {
         if (null != image) {
             this.icon = image;
         }
     }
-    @Override
     public Image getImage() {
         return this.icon;
     }
-    @Override
     public String getName() {
         return this.NAME;
     }
-    @Override
     public void action(iGameObject user) {
         if (user instanceof Head) {
             if (this.bloodColor.equals(((Head) user).getBloodColor())) {
@@ -50,23 +44,19 @@ public class Potion implements iDrawable, iMoveable, iGameObject, iItem {
             }
         }
     }
-    @Override
     public void setLocation(Point location) {
         if (null != location) {
             this.location = location;
         }
     }
-    @Override
     public Point getLocation() {
         return this.location;
     }
-    @Override
     public void setPassRights(String passrights) {
         if (null != passrights && (!"".equals(passrights))) {
             this.passRights = passrights;
         }
     }
-    @Override
     public String getPassRights() {
         return this.passRights;
     }
