@@ -13,37 +13,43 @@ import java.util.List;
 import java.util.Map;
 
 public class Generator {
-    private Level gameLevel;
+    private Level gameLevel = null;
     private int WIDTH;
     private int LENGHT;
 
-    public Exception generateLevel(int width, int lenght, List<String> landscapeTypes, List<String> objectTypes,
-                                   int objectNumber, List<String> enemyTypes, int enemyNumber, Point startPoint) {
+    public Level generateLevel(int width, int lenght, List<String> landscapeTypes, List<String> objectTypes, int objectNumber,
+                              List<String> enemyTypes, int enemyNumber, Point startPoint) throws Exception {
         if (width > 0) {
             this.WIDTH = width;
         }
         else {
-            return new Exception("Wrong format of data");
+            throw  new Exception("Wrong format of data(width = " + Integer.toString(width) + ")");
         }
         if (lenght > 0) {
             this.LENGHT = lenght;
         }
         else {
-            return new Exception("Wrong format of data");
+            throw new Exception("Wrong format of data(lenght = " + Integer.toString(lenght) + ")");
         }
-        Map<Point, iLandscape> levelMap = this.generateMap(landscapeTypes, startPoint);
-        if (null == levelMap) {
-            return new Exception("Can't create a map");
+        Map<Point, iLandscape> levelMap = null;
+        try {
+            levelMap = this.generateMap(landscapeTypes, startPoint);
         }
-        List<iGameObject> levelObjects = this.generateObjectsList(objectTypes, objectNumber,
-                                                                    enemyTypes, enemyNumber, levelMap, startPoint);
-        if (null == levelObjects) {
-            return new Exception("Can't create game objects");
+        catch (Exception ex) {
+            throw new Exception("Can't create a map " + ex.getMessage());
+        }
+        List<iGameObject> levelObjects = null;
+        try {
+            levelObjects = this.generateObjectsList(objectTypes, objectNumber,
+                    enemyTypes, enemyNumber, levelMap, startPoint);
+        }
+        catch (Exception ex) {
+            throw new Exception("Can't create game objects " + ex.getMessage());
         }
         this.gameLevel = new Level(levelMap, levelObjects);
-        return null;
+        return this.gameLevel;
     }
-    private Map<Point, iLandscape> generateMap(List<String> landscapeTypes, Point startPoint) {
+    private Map<Point, iLandscape> generateMap(List<String> landscapeTypes, Point startPoint) throws Exception {
         int landscapeNumber = landscapeTypes.size();
         Map<Point, String> mapPrevious = new HashMap<Point, String>();
         for (int x = 0; x < this.WIDTH; x++) {
@@ -51,7 +57,7 @@ public class Generator {
                 int landscapeIndex = (int) (Math.random() * landscapeNumber);
                 String landscapeName = landscapeTypes.get(landscapeIndex);
                 if (null == landscapeName || "".equals(landscapeName)) {
-                    return null;
+                    throw new Exception("Wrong landscape name");
                 }
                 mapPrevious.put(new Point(x, y), landscapeName);
             }
@@ -68,14 +74,13 @@ public class Generator {
                         for (int j = -1; j < 2; j++) {
                             Point newPoint = new Point(x + i, y + j);
                             String land = mapPrevious.get(newPoint);
-                            if (null == land || "".equals(land)) {
-                                return null;
+                            if (null != land) {
+                                int landscapeCounter = landscapeTypes.indexOf(land);
+                                if (-1 == landscapeCounter) {
+                                    throw new Exception("Wrong landscape name");
+                                }
+                                landscapeArray[landscapeCounter] += 1;
                             }
-                            int landscapeCounter = landscapeTypes.indexOf(land);
-                            if (-1 == landscapeCounter) {
-                                return null;
-                            }
-                            landscapeArray[landscapeCounter] += 1;
                         }
                     }
                     int max = landscapeArray[0], index = 0;
@@ -98,7 +103,7 @@ public class Generator {
             for (int j = 0; j < this.LENGHT; j++) {
                 iLandscape land = factory.createLandscape(mapNew.get(new Point(i, j)));
                 if (null == land) {
-                    return null;
+                    throw new Exception("Can't create landscape named " + mapNew.get(new Point(i, j)));
                 }
                 levelMap.put(new Point(i, j), land);
             }
@@ -107,7 +112,8 @@ public class Generator {
         return levelMap;
     }
     private List<iGameObject> generateObjectsList(List<String> objectTypes,int objectNumber, List<String> enemyTypes,
-                                                  int enemyNumber, Map<Point, iLandscape> levelMap, Point startPoint) {
+                                                  int enemyNumber, Map<Point, iLandscape> levelMap, Point startPoint)
+                                                  throws Exception {
         List<iGameObject> objects = new ArrayList<iGameObject>();
         AbstractFactory factory = new Factory();
         for (int i = 0; i < objectNumber; i++) {
@@ -132,7 +138,7 @@ public class Generator {
                 objects.add(object);
             }
             else {
-                return null;
+                throw new Exception("Can't place object on a map");
             }
         }
         for (int i = 0; i < enemyNumber; i++) {
@@ -157,7 +163,7 @@ public class Generator {
                 objects.add(object);
             }
             else {
-                return null;
+                throw new Exception("Can't place object on a map");
             }
         }
         return objects;

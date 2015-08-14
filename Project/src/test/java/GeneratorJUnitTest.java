@@ -1,4 +1,5 @@
 import Logic.Generator;
+import Map.Level;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,9 +38,14 @@ public class GeneratorJUnitTest extends Assert{
 
     @Test
     public void testGenerator() {
-        Exception actual = new Generator().generateLevel(exampleWidth, exampleLenght, exampleLandscapeTypes,
-                exampleObjectTypes, exampleObjectNumber, exampleEnemyTypes, exampleEnemyNumber, exampleStartPoint);
-        Exception expected = null;
+        Level actual = null;
+        try {
+            actual = new Generator().generateLevel(exampleWidth, exampleLenght, exampleLandscapeTypes,
+                    exampleObjectTypes, exampleObjectNumber, exampleEnemyTypes, exampleEnemyNumber, exampleStartPoint);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Level expected = null;
         assertEquals(expected, actual);
     }
 
