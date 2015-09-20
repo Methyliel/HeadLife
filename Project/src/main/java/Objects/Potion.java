@@ -16,7 +16,7 @@ public class Potion implements iDrawable, iMoveable, iGameObject, iItem {
 
     public Potion(String name) {
         this.NAME = name;
-        bloodColor = BloodColors.instance().getSomeColor();
+        bloodColor = BloodColors.getSomeColour();
     }
     public void setPixelLocation(Point location) {
         if (null != location) {
@@ -40,7 +40,7 @@ public class Potion implements iDrawable, iMoveable, iGameObject, iItem {
     public void action(iGameObject user) {
         if (user instanceof Head) {
             if (this.bloodColor.equals(((Head) user).getBloodColor())) {
-                //Додати здоров'я голові
+                ((Head) user).setHealthPoint(((Head) user).getHealthPoint() + 2);
             }
         }
     }

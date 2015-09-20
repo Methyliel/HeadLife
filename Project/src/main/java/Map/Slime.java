@@ -13,7 +13,6 @@ public class Slime implements iLandscape {
     public Slime() {
         this.TYPE = "Ground";
     }
-    @Override
     public boolean canMove(iMoveable object) {
         if (object instanceof iGameObject) {
             if ("Head".equals(((iGameObject) object).getName())) {
@@ -23,17 +22,14 @@ public class Slime implements iLandscape {
         }
         return false;
     }
-    @Override
     public String getLandType() {
         return this.TYPE;
     }
-    @Override
     public void setImage(Image image) {
         if (null != image) {
             this.image = image;
         }
     }
-    @Override
     public Image getImage() {
         return this.image;
     }

@@ -1,38 +1,37 @@
 package Objects;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class BloodColors {
-    private static BloodColors colorList = null;
-    private final List<String> colors;
+    public static final String fuchsia = "COLOR_Fuchsia";
+    public static final String violet = "COLOR_Violet";
+    public static final String indigo = "COLOR_Indigo";
+    public static final String cerulean = "COLOR_Cerulean";
+    public static final String olive = "COLOR_Olive";
+    public static final String yellow = "COLOR_Yellow";
+    public static final String bronze = "COLOR_Bronze";
 
-    private BloodColors() {
-        this.colors = new ArrayList<String>();
-        this.colors.add("COLOR_Fuchsia");
-        this.colors.add("COLOR_Violet");
-        this.colors.add("COLOR_Indigo");
-        this.colors.add("COLOR_Cerulean");
-        this.colors.add("COLOR_Olive");
-        this.colors.add("COLOR_Yellow");
-        this.colors.add("COLOR_Bronze");
-    }
-    public static BloodColors instance() {
-        if (null == BloodColors.colorList) {
-            BloodColors.colorList = new BloodColors();
+    public static String getSomeColour() {
+        int r = (int) (Math.random() * 7);
+        if (0 == r) {
+            return BloodColors.fuchsia;
         }
-        return BloodColors.colorList;
-    }
-    public String getSomeColor() {
-        int colorNumber = (int) (Math.random() * this.colors.size());
-        return this.colors.get(colorNumber);
-    }
-    public String getExactColor(int colorNumber) {
-        if (colorNumber >= this.colors.size()) {
-            return null;
+        if (1 == r) {
+            return BloodColors.violet;
         }
-        else {
-            return this.colors.get(colorNumber);
+        if (2 == r) {
+            return BloodColors.indigo;
         }
+        if (3 == r) {
+            return BloodColors.cerulean;
+        }
+        if (4 == r) {
+            return BloodColors.olive;
+        }
+        if (5 == r) {
+            return BloodColors.yellow;
+        }
+        if (6 == r) {
+            return BloodColors.bronze;
+        }
+        return null;
     }
 }

@@ -73,49 +73,49 @@ public class Factory extends AbstractFactory{
             Head head = null;
             if ("Feferi".equals(name)) {
                 head = new Head("Feferi");
-                head.setBloodColor(BloodColors.instance().getExactColor(0));
+                head.setBloodColor(BloodColors.fuchsia);
                 ((iAttack) head).setRange(1);
                 ((iAttack) head).setDamage(2);
                 ((iAttack) head).setHealthPoint(3);
             }
             if ("Eridan".equals(name)) {
                 head = new Head("Eridan");
-                head.setBloodColor(BloodColors.instance().getExactColor(1));
+                head.setBloodColor(BloodColors.violet);
                 ((iAttack) head).setRange(1);
                 ((iAttack) head).setDamage(3);
                 ((iAttack) head).setHealthPoint(2);
             }
             if ("Equius".equals(name)) {
                 head = new Head("Equius");
-                head.setBloodColor(BloodColors.instance().getExactColor(2));
+                head.setBloodColor(BloodColors.indigo);
                 ((iAttack) head).setRange(1);
                 ((iAttack) head).setDamage(4);
                 ((iAttack) head).setHealthPoint(5);
             }
             if ("Vriska".equals(name)) {
                 head = new Head("Vriska");
-                head.setBloodColor(BloodColors.instance().getExactColor(3));
+                head.setBloodColor(BloodColors.cerulean);
                 ((iAttack) head).setRange(1);
                 ((iAttack) head).setDamage(3);
                 ((iAttack) head).setHealthPoint(3);
             }
             if ("Nepeta".equals(name)) {
                 head = new Head("Nepeta");
-                head.setBloodColor(BloodColors.instance().getExactColor(4));
+                head.setBloodColor(BloodColors.olive);
                 ((iAttack) head).setRange(1);
                 ((iAttack) head).setDamage(3);
                 ((iAttack) head).setHealthPoint(4);
             }
             if ("Sollux".equals(name)) {
                 head = new Head("Sollux");
-                head.setBloodColor(BloodColors.instance().getExactColor(5));
+                head.setBloodColor(BloodColors.yellow);
                 ((iAttack) head).setRange(1);
                 ((iAttack) head).setDamage(5);
                 ((iAttack) head).setHealthPoint(3);
             }
             if ("Tavros".equals(name)) {
                 head = new Head("Tavros");
-                head.setBloodColor(BloodColors.instance().getExactColor(6));
+                head.setBloodColor(BloodColors.bronze);
                 ((iAttack) head).setRange(2);
                 ((iAttack) head).setDamage(3);
                 ((iAttack) head).setHealthPoint(3);

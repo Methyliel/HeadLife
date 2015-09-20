@@ -13,24 +13,20 @@ public class Exit implements iLandscape {
     public Exit() {
         this.TYPE = "Ground";
     }
-    @Override
     public boolean canMove(iMoveable object) {
         if (object instanceof Head) {
             return true;
         }
         return false;
     }
-    @Override
     public String getLandType() {
         return this.TYPE;
     }
-    @Override
     public void setImage(Image image) {
         if (null != image) {
             this.image = image;
         }
     }
-    @Override
     public Image getImage() {
         return this.image;
     }
