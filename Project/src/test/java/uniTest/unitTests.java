@@ -1,3 +1,4 @@
+package uniTest;
 
 public class unitTests {
     public static void main(String argc[]) {

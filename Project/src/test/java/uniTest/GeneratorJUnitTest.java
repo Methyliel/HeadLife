@@ -1,3 +1,5 @@
+package uniTest;
+
 import Logic.Generator;
 import Map.Level;
 import org.junit.After;
